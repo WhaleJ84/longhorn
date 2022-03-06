@@ -11,6 +11,7 @@ from .config import config_by_name
 
 
 def create_app(config_name: str):
+    # pylint: disable=import-outside-toplevel
     """
     Builds the Flask application based on the `config_name` passed.
     Available configs are:
@@ -35,5 +36,9 @@ def create_app(config_name: str):
     if None in app.config["AUTH_TOKENS"]:
         app.logger.warning("No authorization tokens detected. Defaulting to: %s", app.config['DEFAULT_TOKEN'])
         app.config['AUTH_TOKENS'] = {app.config['DEFAULT_TOKEN']: 'INSECURE-SESSION'}
+
+    from longhorn.link_down import link_down as link_down_blueprint
+
+    app.register_blueprint(link_down_blueprint, url_prefix="/link-down")
 
     return app
