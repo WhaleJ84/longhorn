@@ -23,17 +23,17 @@ def create_app(config_name: str):
     """
     app = Flask(__name__)
     app.config.from_object(config_by_name[config_name])
-    log = create_logger(app)
-    log.setLevel(10)  # Debug
+    app.logger = create_logger(app)
+    app.logger.setLevel(10)  # Debug
 
     if getenv("LONGHORN_ENV") is None:
-        log.warning("`LONGHORN_ENV' not found. Defaulting to Development environment")
+        app.logger.warning("`LONGHORN_ENV' not found. Defaulting to Development environment")
     else:
-        log.info("Running in: %s mode", config_name)
+        app.logger.info("Running in: %s mode", config_name)
 
     # AUTH_TOKENS would look as such: {None: 'some-user'}
     if None in app.config["AUTH_TOKENS"]:
-        log.warning("No authorization tokens detected. Defaulting to: %s", app.config['DEFAULT_TOKEN'])
+        app.logger.warning("No authorization tokens detected. Defaulting to: %s", app.config['DEFAULT_TOKEN'])
         app.config['AUTH_TOKENS'] = {app.config['DEFAULT_TOKEN']: 'INSECURE-SESSION'}
 
     return app
