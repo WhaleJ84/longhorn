@@ -1,5 +1,3 @@
-from os import getenv
-
 from flask_testing import (
     TestCase,
 )  # https://flask.palletsprojects.com/en/1.1.x/testing/
