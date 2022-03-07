@@ -3,6 +3,7 @@
 Contains all the environment variables per build.
 """
 from os import getenv, urandom
+from secrets import token_urlsafe
 
 
 class Config:
@@ -11,7 +12,7 @@ class Config:
     """
     SECRET_KEY = urandom(16)
     LOGIN_DISABLED = False
-    DEFAULT_TOKEN = 'dGhpc19pc19pbnNlY3VyZQ=='
+    DEFAULT_TOKEN = token_urlsafe()
     AUTH_TOKENS = {getenv("LONGHORN_NPRD_TOKEN"): "longhorn-admin"}
 
 

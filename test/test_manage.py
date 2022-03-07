@@ -18,12 +18,9 @@ class LonghornManage(LonghornTestCase):
     def test_manage_defaults_to_dev_app(self):
         with self.assertLogs('src.longhorn') as logger:
             self.create_app("")
-        self.assertEqual(
-            logger.output,
-            [
-                "WARNING:src.longhorn:`LONGHORN_ENV' not found. Defaulting to Development environment",
-                "WARNING:src.longhorn:No authorization tokens detected. Defaulting to: dGhpc19pc19pbnNlY3VyZQ=="
-            ]
+        self.assertIn(
+            "WARNING:src.longhorn:`LONGHORN_ENV' not found. Defaulting to Development environment",
+            logger.output
         )
 
     def test_manage_returns_flask_app(self):
