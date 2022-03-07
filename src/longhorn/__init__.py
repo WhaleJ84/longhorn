@@ -35,7 +35,7 @@ def create_app(config_name: str = None):
     # AUTH_TOKENS would look as such: {None: 'some-user'}
     if None in app.config["AUTH_TOKENS"]:
         app.logger.warning("No authorization tokens detected. Defaulting to: %s", app.config['DEFAULT_TOKEN'])
-        app.config['AUTH_TOKENS'] = {app.config['DEFAULT_TOKEN']: 'INSECURE-SESSION'}
+        app.config['AUTH_TOKENS'] = {app.config['DEFAULT_TOKEN']: 'unknown-user'}
 
     from src.longhorn.link_down import link_down as link_down_blueprint
 
