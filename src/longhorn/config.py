@@ -25,6 +25,18 @@ class DevelopmentConfig(Config):
     PROCESS_TTL = 10
 
 
+class TestingConfig(Config):
+    """
+    Variables that add to/overwrite values from the default class for the test environment.
+    """
+    DEBUG = True
+    TESTING = True
+    ENVIRONMENT = 'test'
+    PROCESS_TTL = 1
+    AUTH_TOKENS = {"test": "unit-test"}
+
+
 config_by_name = {
     "dev": DevelopmentConfig,
+    "test": TestingConfig,
 }
