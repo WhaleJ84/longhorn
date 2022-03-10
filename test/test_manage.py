@@ -4,7 +4,7 @@ from src.manage import create_app
 from test import LonghornTestCase
 
 
-class LonghornManage(LonghornTestCase):
+class TestManage(LonghornTestCase):
     def test_manage_creates_test_app(self):
         with self.assertLogs('src.longhorn') as logger:
             self.create_app()
