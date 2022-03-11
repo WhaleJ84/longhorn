@@ -5,5 +5,6 @@ curl -X POST \
   -H 'Accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
-  	"causing_ci": "hostname.example.com"
+  	"causing_ci": "hostname.example.com",
+  	"event_text": "LINK DOWN | TRANSIT-LON<>CAR | A3"
   }'

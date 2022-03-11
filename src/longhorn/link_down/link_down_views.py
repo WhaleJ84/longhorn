@@ -2,9 +2,11 @@
 Contains all the routes (views) needed for the link_down blueprint.
 Things such as functions and forms should be in separate files.
 """
+from flask import current_app as app
 from flask import request
 
 from src.longhorn.link_down.link_down_functions import build_response_data
+from src.longhorn.process.process_functions import check_sessions
 from . import link_down
 
 
@@ -15,4 +17,12 @@ def runbook():
     """
     response = build_response_data(request.json)
     response.update({"status": 200})
+
+    # Checking if there is already a request in the queue
+    current_process = check_sessions(request.json["event_text"], app.config["PROCESS_FILE"])
+    if current_process.is_duplicate:
+        message = "Duplicate response"
+        app.logger.info(f"{current_process.process_id}\tduplicate response: {current_process.event_text} ")
+        response.update({"status": 208, "message": message})
+
     return response, int(response["status"])
