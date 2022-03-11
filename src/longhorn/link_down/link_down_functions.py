@@ -11,12 +11,11 @@ def build_response_data(data: dict) -> dict:
     When all expected parameters are recieved, they are returned in a sorted dictionary.
 
     >>> build_response_data({
-    ... "event_text": "LINK-DOWN | SITE-A<>SITE-Z | SERVICE PROVIDER",
     ... "event_url": "https://example.com",
     ... "timestamp": "2021-10-15 23:20:01",
     ... "causing_ci": "hostname.example.com"
     ... })
-    {'causing_ci': 'hostname.example.com', 'event_text': 'LINK-DOWN | SITE-A<>SITE-Z | SERVICE PROVIDER', 'event_url': 'https://example.com', 'timestamp': '2021-10-15 23:20:01'}
+    {'causing_ci': 'hostname.example.com', 'event_url': 'https://example.com', 'timestamp': '2021-10-15 23:20:01'}
 
 
     When unexpected parameters are recieved, they are omitted from the returned dictionary.
