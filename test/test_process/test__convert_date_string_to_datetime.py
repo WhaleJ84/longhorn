@@ -16,7 +16,7 @@ class ConvertDateStringToDatetimeTestCase(ProcessFunctionsTestCase):
         )
 
     def test_convert_date_string_to_datetime_returns_none_on_bad_format(self):
-        self.assertIsNone(self.process._convert_date_string_to_datetime("bananas"))
+        self.assertIsNone(self.process._convert_date_string_to_datetime("01/01/1970 00:00:00"))
 
     def test_convert_date_string_to_datetime_handles_type_error_on_wrong_type(self):
         result = self.process._convert_date_string_to_datetime(

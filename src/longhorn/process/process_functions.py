@@ -9,7 +9,6 @@ from re import match, search
 from threading import Timer
 from uuid import uuid4
 
-from flask import request
 from flask import current_app as app
 
 
@@ -114,35 +113,23 @@ class Process:  # pylint: disable=too-many-instance-attributes
         :param string_datetime: Datetime in string format (e.g. YYYY-MM-DD HH:MM:SS)
         """
         try:
-            if match(
-                r"^[0-9]{4}(-[0-9]{2}){2} [0-9]{2}(:[0-9]{2}){2}\.[0-9]{6}$",
-                string_datetime,
-            ):
-                date = string_datetime.split(" ")[0]
-                time = string_datetime.split(" ")[1]
-                year = int(date.split("-")[0])
-                month = int(date.split("-")[1])
-                day = int(date.split("-")[2])
-                hour = int(time.split(":")[0])
-                minute = int(time.split(":")[1])
-                second = int(time.split(":")[2].split(".")[0])
-                millisecond = int(time.split(".")[1])
+            date = string_datetime.split(" ")[0]
+            time = string_datetime.split(" ")[1]
+            year = int(date.split("-")[0])
+            month = int(date.split("-")[1])
+            day = int(date.split("-")[2])
+            hour = int(time.split(":")[0])
+            minute = int(float(time.split(":")[1]))
+            second = int(float(time.split(":")[2]))
+            if match(r"^[0-9]{4}([-/][0-9]{2}){2} [0-9]{2}(:[0-9]{2}){2}\.[0-9]{6}$", string_datetime):
+                millisecond = int(float(time.split(".")[1]))
                 return datetime(year, month, day, hour, minute, second, millisecond)
-
-            if match(
-                r"^[0-9]{4}(-[0-9]{2}){2} [0-9]{2}(:[0-9]{2}){2}$", string_datetime
-            ):
-                date = string_datetime.split(" ")[0]
-                time = string_datetime.split(" ")[1]
-                year = int(date.split("-")[0])
-                month = int(date.split("-")[1])
-                day = int(date.split("-")[2])
-                hour = int(time.split(":")[0])
-                minute = int(time.split(":")[1])
-                second = int(time.split(":")[2])
-                return datetime(year, month, day, hour, minute, second)
-        except TypeError:
+            return datetime(year, month, day, hour, minute, second)
+        except AttributeError:
             pass
+        except ValueError:
+            pass
+        app.logger.error(f"Non-compliant date-time: {string_datetime}")
         return None
 
     def _check_if_duplicate(self, duplicates: list):
@@ -194,15 +181,13 @@ class Process:  # pylint: disable=too-many-instance-attributes
             running_processes.writerows(lines)
 
 
-def delete_process_entries(clear_file: str = None):
+def delete_process_entries(clear_file: str):
     """
     Clears all entries from processes file.
 
     :param clear_file: process file to clear
     """
     lines = []
-    if not clear_file:
-        clear_file = app.config["PROCESS_FILE"]
 
     with open(clear_file, "rt", encoding="utf-8") as process_file:
         running_processes = reader(process_file)
@@ -214,20 +199,13 @@ def delete_process_entries(clear_file: str = None):
         running_processes.writerow(lines[0])
 
 
-def check_sessions(event_text: str = None, process_file: str = None):
+def check_sessions(event_text: str, process_file: str):
     """
     Creates a process for the incoming request.
 
     :param event_text: The event_text provided in the request data
     :param process_file: Path to process file
     """
-    # this allows for unit-testing this method specifically.
-    # as tests aren't run the same as in prod, this allows for request data to be emulated.
-    if not event_text:
-        event_text = request.json["event_text"]
-    if not process_file:
-        process_file = app.config["PROCESS_FILE"]
-
     current_process = Process(
         event_text,
         process_file,
