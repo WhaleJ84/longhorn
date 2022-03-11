@@ -2,7 +2,7 @@ from test import LonghornTestCase
 from src.longhorn.link_down.link_down_functions import *
 
 
-class TestLinkDownFunctions(LonghornTestCase):
+class BuildResponseDataTestCase(LonghornTestCase):
     def test_build_response_data_returns_expected_values(self):
         self.assertEqual(
             build_response_data(self.data),
