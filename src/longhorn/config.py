@@ -2,7 +2,9 @@
 """
 Contains all the environment variables per build.
 """
+from glob import glob
 from os import getenv, urandom
+from os.path import abspath, join
 from secrets import token_urlsafe
 
 
@@ -14,6 +16,8 @@ class Config:
     LOGIN_DISABLED = False
     DEFAULT_TOKEN = token_urlsafe()
     AUTH_TOKENS = {getenv("LONGHORN_NPRD_TOKEN"): "longhorn-admin"}
+    # recursively search for the processes.csv file in that path and return the absolute path
+    PROCESS_FILE = abspath(join(abspath("."), glob("**/var/cache/processes.csv", recursive=True)[0]))
 
 
 class DevelopmentConfig(Config):
@@ -35,6 +39,7 @@ class TestingConfig(Config):
     ENVIRONMENT = 'test'
     PROCESS_TTL = 1
     AUTH_TOKENS = {"test": "unit-test"}
+    PROCESS_FILE = 'test/test_process/var/cache/processes.csv'
 
 
 config_by_name = {
