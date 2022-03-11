@@ -3,8 +3,12 @@ from src.longhorn.process.process_functions import Process
 from test import LonghornTestCase
 
 
-class TestProcessFunctions(LonghornTestCase):
+class ProcessFunctionsTestCase(LonghornTestCase):
     def setUp(self) -> None:
-        self.event_text = self.data["event_text"]
-        self.process_file = TestingConfig.PROCESS_FILE
-        self.process = Process(self.event_text, self.process_file, TestingConfig.PROCESS_TTL)
+        self.event_text = "LINK DOWN | TRANSIT-LON<>CAR | A3"
+        self.process = Process(
+            self.event_text,
+            TestingConfig.PROCESS_FILE,
+            TestingConfig.PROCESS_TTL,
+            _ut=True
+        )

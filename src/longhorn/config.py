@@ -39,7 +39,7 @@ class TestingConfig(Config):
     ENVIRONMENT = 'test'
     PROCESS_TTL = 1
     AUTH_TOKENS = {"test": "unit-test"}
-    PROCESS_FILE = 'test/test_process/var/cache/processes.csv'
+    PROCESS_FILE = 'test/test_process/var/cache/test_processes.csv'
 
 
 config_by_name = {

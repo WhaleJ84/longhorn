@@ -8,7 +8,7 @@ class BuildResponseDataTestCase(LonghornTestCase):
             build_response_data(self.data),
             {
                 "causing_ci": "lon-edge-gw1.example.com",
-                "event_text": "LINK DOWN | LON<>CAR | A3",
+                "event_text": "LINK DOWN | TRANSIT-LON<>CAR | A3",
                 "event_url": "https://example.com",
                 "timestamp": "2021-10-15 23:20:01"
             }
