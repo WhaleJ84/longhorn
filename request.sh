@@ -8,5 +8,6 @@ curl -X POST \
   -d '{
   	"causing_ci": "hostname.example.com",
   	"event_text": "LINK DOWN | TRANSIT-LON<>CAR | A3",
+  	"event_url": "https://example.com",
   	"timestamp": "2021-10-15 23:20:01"
   }'

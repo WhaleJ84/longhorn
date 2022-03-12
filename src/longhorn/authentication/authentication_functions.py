@@ -2,7 +2,6 @@
 Contains all the functions needed for the authentication blueprint.
 Things such as routes and forms should be in separate files.
 """
-from flask import request
 from flask import current_app as app
 from flask_httpauth import (
     HTTPTokenAuth,
@@ -32,36 +31,16 @@ def verify_token(token: str):
 
 
 @auth.error_handler
-def auth_error(status: int, data: dict = None):
+def auth_error(status: int):
     """
     Provides the user with an appropriate error response depending on the fault.
 
     :param status: The integer value of the HTTP response code
-    :param data: The request data from flask
     :return: A dictionary response containing the HTTP response code and failure message
     """
     response = {
         "status": status,
     }
-
-    if not data:
-        data = request.json
-
-    # this try/except exists to allow unit-testing of this method as tests aren't run the same as in prod.
-    # if no event_text is sent, it will be caught in a later step when verifying the request body.
-    try:
-        response.update({"event_text": data["event_text"]})
-    except KeyError:
-        pass
-    except TypeError:
-        pass
-
-    try:
-        response.update({"event_url": data["event_url"]})
-    except KeyError:
-        pass
-    except TypeError:
-        pass
 
     if status == 401:
         message = "Unauthorized request"
