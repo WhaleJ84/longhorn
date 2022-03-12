@@ -10,5 +10,5 @@ class ProcessFunctionsTestCase(LonghornTestCase):
             self.event_text,
             TestingConfig.PROCESS_FILE,
             TestingConfig.PROCESS_TTL,
-            _ut=True
+            _ut=True,
         )

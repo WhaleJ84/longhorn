@@ -16,6 +16,7 @@ class Process:  # pylint: disable=too-many-instance-attributes
     """
     Builds an object out of an incoming request to enable process logging.
     """
+
     def __init__(
         self,
         event_text: str,
@@ -66,7 +67,9 @@ class Process:  # pylint: disable=too-many-instance-attributes
         >>> process._set_circuit_info()
         ['TRANSIT', 'LON', 'CAR']
         """
-        identifier = search(r"[a-zA-Z]*-[a-zA-Z0-9]*<>[a-zA-Z0-9]*", self.event_text).group()
+        identifier = search(
+            r"[a-zA-Z]*-[a-zA-Z0-9]*<>[a-zA-Z0-9]*", self.event_text
+        ).group()
         site_ends = str(
             search(r"[a-zA-Z0-9]*<>[a-zA-Z0-9]*", identifier).group()
         ).split("<>")
@@ -121,7 +124,10 @@ class Process:  # pylint: disable=too-many-instance-attributes
             hour = int(time.split(":")[0])
             minute = int(float(time.split(":")[1]))
             second = int(float(time.split(":")[2]))
-            if match(r"^[0-9]{4}([-/][0-9]{2}){2} [0-9]{2}(:[0-9]{2}){2}\.[0-9]{6}$", string_datetime):
+            if match(
+                r"^[0-9]{4}([-/][0-9]{2}){2} [0-9]{2}(:[0-9]{2}){2}\.[0-9]{6}$",
+                string_datetime,
+            ):
                 millisecond = int(float(time.split(".")[1]))
                 return datetime(year, month, day, hour, minute, second, millisecond)
             return datetime(year, month, day, hour, minute, second)

@@ -12,20 +12,24 @@ class Config:
     """
     The default variables applied to all environments.
     """
+
     SECRET_KEY = urandom(16)
     LOGIN_DISABLED = False
     DEFAULT_TOKEN = token_urlsafe()
     AUTH_TOKENS = {getenv("LONGHORN_NPRD_TOKEN"): "longhorn-admin"}
     # recursively search for the processes.csv file in that path and return the absolute path
-    PROCESS_FILE = abspath(join(abspath("."), glob("**/var/cache/processes.csv", recursive=True)[0]))
+    PROCESS_FILE = abspath(
+        join(abspath("."), glob("**/var/cache/processes.csv", recursive=True)[0])
+    )
 
 
 class DevelopmentConfig(Config):
     """
     Variables that add to/overwrite values from the default class for the development environment.
     """
+
     DEBUG = True
-    ENVIRONMENT = 'dev'
+    ENVIRONMENT = "dev"
     FLASK_DEBUG = True
     PROCESS_TTL = 10
 
@@ -34,12 +38,13 @@ class TestingConfig(Config):
     """
     Variables that add to/overwrite values from the default class for the test environment.
     """
+
     DEBUG = True
     TESTING = True
-    ENVIRONMENT = 'test'
+    ENVIRONMENT = "test"
     PROCESS_TTL = 1
     AUTH_TOKENS = {"test": "unit-test"}
-    PROCESS_FILE = 'test/test_process/var/cache/test_processes.csv'
+    PROCESS_FILE = "test/test_process/var/cache/test_processes.csv"
 
 
 config_by_name = {

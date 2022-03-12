@@ -13,4 +13,6 @@ class VerifyTokenTestCase(LonghornTestCase):
 
     def test_verify_token_returns_user_dict_on_good_token(self):
         with app.app_context():
-            self.assertEqual("unit-test", verify_token(self.headers["Authorization"].split()[1]))
+            self.assertEqual(
+                "unit-test", verify_token(self.headers["Authorization"].split()[1])
+            )

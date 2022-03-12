@@ -25,8 +25,10 @@ def create_app(config_name: str = None):
     app.logger.setLevel(10)  # Debug
 
     if not config_name:
-        app.logger.warning("`LONGHORN_ENV' not found. Defaulting to Development environment")
-        config_name = 'dev'
+        app.logger.warning(
+            "`LONGHORN_ENV' not found. Defaulting to Development environment"
+        )
+        config_name = "dev"
     else:
         app.logger.info("Running in: %s mode", config_name)
 
@@ -34,8 +36,11 @@ def create_app(config_name: str = None):
 
     # AUTH_TOKENS would look as such: {None: 'some-user'}
     if None in app.config["AUTH_TOKENS"]:
-        app.logger.warning("No authorization tokens detected. Defaulting to: %s", app.config['DEFAULT_TOKEN'])
-        app.config['AUTH_TOKENS'] = {app.config['DEFAULT_TOKEN']: 'unknown-user'}
+        app.logger.warning(
+            "No authorization tokens detected. Defaulting to: %s",
+            app.config["DEFAULT_TOKEN"],
+        )
+        app.config["AUTH_TOKENS"] = {app.config["DEFAULT_TOKEN"]: "unknown-user"}
 
     from src.longhorn.link_down import link_down as link_down_blueprint
     from src.longhorn.process import process as process_blueprint

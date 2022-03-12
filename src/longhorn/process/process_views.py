@@ -16,7 +16,7 @@ def view_processes():
     """
     return render_template(
         "processes.html",
-        data=read_csv(
-            app.config["PROCESS_FILE"]
-        ).to_html(index=False, classes=['table', 'table--lined', 'table--selectable'])
+        data=read_csv(app.config["PROCESS_FILE"]).to_html(
+            index=False, classes=["table", "table--lined", "table--selectable"]
+        ),
     )

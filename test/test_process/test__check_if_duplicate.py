@@ -29,7 +29,9 @@ class CheckIfDuplicateTestCase(ProcessFunctionsTestCase):
             )
         )
 
-    def test_check_if_duplicate_returns_false_if_duplicate_is_not_in_range_of_other(self):
+    def test_check_if_duplicate_returns_false_if_duplicate_is_not_in_range_of_other(
+        self,
+    ):
         self.assertFalse(
             self.process._check_if_duplicate(
                 [

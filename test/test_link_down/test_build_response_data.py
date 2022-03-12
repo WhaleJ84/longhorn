@@ -10,8 +10,8 @@ class BuildResponseDataTestCase(LonghornTestCase):
                 "causing_ci": "lon-edge-gw1.example.com",
                 "event_text": "LINK DOWN | TRANSIT-LON<>CAR | A3",
                 "event_url": "https://example.com",
-                "timestamp": "2021-10-15 23:20:01"
-            }
+                "timestamp": "2021-10-15 23:20:01",
+            },
         )
 
     def test_build_response_data_returns_relevant_values(self):
@@ -19,7 +19,7 @@ class BuildResponseDataTestCase(LonghornTestCase):
             "causing_ci": "lon-edge-gw1.example.com",
             "event_text": "LINK DOWN | LON<>CAR | A3",
             "event_url": "https://example.com",
-            "alphabet": "abcdefghijklmnopqrstuvwxyz"
+            "alphabet": "abcdefghijklmnopqrstuvwxyz",
         }
         self.assertEqual(
             build_response_data(self.data),
@@ -27,5 +27,5 @@ class BuildResponseDataTestCase(LonghornTestCase):
                 "causing_ci": "lon-edge-gw1.example.com",
                 "event_text": "LINK DOWN | LON<>CAR | A3",
                 "event_url": "https://example.com",
-            }
+            },
         )

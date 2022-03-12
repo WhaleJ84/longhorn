@@ -19,10 +19,14 @@ def runbook():
     response.update({"status": 200})
 
     # Checking if there is already a request in the queue
-    current_process = check_sessions(request.json["event_text"], app.config["PROCESS_FILE"])
+    current_process = check_sessions(
+        request.json["event_text"], app.config["PROCESS_FILE"]
+    )
     if current_process.is_duplicate:
         message = "Duplicate response"
-        app.logger.info(f"{current_process.process_id}\tduplicate response: {current_process.event_text} ")
+        app.logger.info(
+            f"{current_process.process_id}\tduplicate response: {current_process.event_text} "
+        )
         response.update({"status": 208, "message": message})
 
     return response, int(response["status"])

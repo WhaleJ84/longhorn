@@ -33,9 +33,7 @@ def build_response_data(data: dict) -> dict:
     :return:  Relevant request data in alphabetical order
     """
     response = {}
-    expected_parameters = [
-        "causing_ci", "event_text", "event_url", "timestamp"
-    ]
+    expected_parameters = ["causing_ci", "event_text", "event_url", "timestamp"]
 
     for parameter in expected_parameters:
         if parameter in data:
