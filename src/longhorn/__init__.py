@@ -39,8 +39,10 @@ def create_app(config_name: str = None):
 
     from src.longhorn.link_down import link_down as link_down_blueprint
     from src.longhorn.process import process as process_blueprint
+    from src.longhorn.authentication import authentication as authentication_blueprint
 
     app.register_blueprint(link_down_blueprint, url_prefix="/link-down")
     app.register_blueprint(process_blueprint)
+    app.register_blueprint(authentication_blueprint)
 
     return app

@@ -2,6 +2,11 @@
 Contains all the functions needed for the link_down blueprint.
 Things such as routes and forms should be in separate files.
 """
+from flask import current_app as app
+from flask import request
+
+from src.longhorn.authentication.authentication_functions import auth
+from . import link_down
 
 
 def build_response_data(data: dict) -> dict:
@@ -36,3 +41,25 @@ def build_response_data(data: dict) -> dict:
         if parameter in data:
             response.update({f"{parameter}": data[parameter]})
     return response
+
+
+@link_down.before_request
+@auth.login_required
+def verify_data():
+    """
+    Ensures the JSON values received in the request body includes all required data.
+    For any missed value, a list will be returned containing the remaining requirements.
+    """
+    missing_data = ["causing_ci", "event_text", "timestamp"]
+
+    for entry in dict(request.json):
+        if entry in missing_data:
+            missing_data.remove(entry)
+
+    if missing_data:
+        response = build_response_data(dict(request.json))
+        message = f"Missing: {missing_data} from required data"
+        response.update({"status": 400, "message": message})
+        app.logger.warning(f"{auth.current_user()}: {message}")
+        return response, response["status"]
+    return None
