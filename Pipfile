@@ -14,6 +14,7 @@ flask-testing = "*"
 coverage = "*"
 bandit = "*"
 pytest = "*"
+black = "*"
 
 [requires]
 python_version = "3.8"
