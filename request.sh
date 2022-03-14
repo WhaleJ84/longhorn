@@ -11,3 +11,6 @@ curl -X POST \
   	"event_url": "https://example.com",
   	"timestamp": "2021-10-15 23:20:01"
   }'
+#  	"event_text": "LINK DOWN | TRANSIT-CAR<>DUB | B3",
+#  	"event_text": "LINK DOWN | TRANSIT-DUB<>EDN | C3",
+#  	"event_text": "LINK DOWN | TRANSIT-EDN<>LON | D3",
