@@ -7,6 +7,7 @@ name = "pypi"
 flask = "*"
 pandas = "*"
 flask-httpauth = "*"
+pynetbox = "*"
 
 [dev-packages]
 pylint = "*"
