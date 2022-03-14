@@ -7,6 +7,7 @@ from flask import request
 
 from src.longhorn.link_down.link_down_functions import build_response_data
 from src.longhorn.process.process_functions import check_sessions
+from src.longhorn.third_party.source_of_truth.netbox.netbox_functions import Netbox
 from . import link_down
 
 
@@ -28,5 +29,14 @@ def runbook():
             f"{current_process.process_id}\tduplicate response: {current_process.event_text} "
         )
         response.update({"status": 208, "message": message})
+        return response, int(response["status"])
+
+    netbox = Netbox()
+
+    if netbox.circuit.status.label != 'Active':
+        message = f'circuit {netbox.circuit} is in {netbox.circuit.status} state'
+        app.logger.info(
+           f"{current_process.process_id}\t{message}"
+        )
 
     return response, int(response["status"])
