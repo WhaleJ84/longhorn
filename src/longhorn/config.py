@@ -21,6 +21,9 @@ class Config:
     PROCESS_FILE = abspath(
         join(abspath("."), glob("**/var/cache/processes.csv", recursive=True)[0])
     )
+    SOURCE_OF_TRUTH = "netbox"
+    NETBOX_URL = getenv("NETBOX_URL")
+    NETBOX_TOKEN = getenv("NETBOX_TOKEN")
 
 
 class DevelopmentConfig(Config):
@@ -47,7 +50,12 @@ class TestingConfig(Config):
     PROCESS_FILE = "test/test_process/var/cache/test_processes.csv"
 
 
+class BrokenConfig(TestingConfig):
+    AUTH_TOKENS = {None: "some-user"}
+
+
 config_by_name = {
     "dev": DevelopmentConfig,
     "test": TestingConfig,
+    "broken": BrokenConfig,
 }

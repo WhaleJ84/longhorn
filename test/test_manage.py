@@ -18,5 +18,12 @@ class TestManage(LonghornTestCase):
             logger.output,
         )
 
+    def test_manage_has_auth_tokens_defaulted_on_none(self):
+        self.app = self.create_app("broken")
+        self.assertEqual(
+            {self.app.config["DEFAULT_TOKEN"]: "unknown-user"},
+            self.app.config["AUTH_TOKENS"]
+        )
+
     def test_manage_returns_flask_app(self):
         self.assertEqual(type(create_app()), flask.app.Flask)
