@@ -53,7 +53,9 @@ class Process:  # pylint: disable=too-many-instance-attributes
             if self.is_duplicate is False:
                 self.create_process()
                 random_time = self.hold_delay_in_seconds + randint(0, 9)  # nosec B311
-                app.logger.debug(f"Keeping process {self.process_id} alive for {random_time} seconds")
+                app.logger.debug(
+                    f"Keeping process {self.process_id} alive for {random_time} seconds"
+                )
                 ttl = Timer(random_time, self.delete_process)
                 ttl.start()
 

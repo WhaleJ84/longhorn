@@ -22,7 +22,7 @@ class TestManage(LonghornTestCase):
         self.app = self.create_app("broken")
         self.assertEqual(
             {self.app.config["DEFAULT_TOKEN"]: "unknown-user"},
-            self.app.config["AUTH_TOKENS"]
+            self.app.config["AUTH_TOKENS"],
         )
 
     def test_manage_returns_flask_app(self):

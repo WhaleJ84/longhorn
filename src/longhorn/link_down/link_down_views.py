@@ -33,10 +33,8 @@ def runbook():
 
     netbox = Netbox()
 
-    if netbox.circuit.status.label != 'Active':
-        message = f'circuit {netbox.circuit} is in {netbox.circuit.status} state'
-        app.logger.info(
-           f"{current_process.process_id}\t{message}"
-        )
+    if netbox.circuit.status.label != "Active":
+        message = f"circuit {netbox.circuit} is in {netbox.circuit.status} state"
+        app.logger.info(f"{current_process.process_id}\t{message}")
 
     return response, int(response["status"])

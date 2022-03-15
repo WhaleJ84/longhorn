@@ -144,13 +144,11 @@ class Netbox:
         - virtualmachine_count
         - vlan_count
     """
+
     def __init__(self):
-        self.api = api(
-            url=app.config["NETBOX_URL"],
-            token=app.config["NETBOX_TOKEN"]
-        )
+        self.api = api(url=app.config["NETBOX_URL"], token=app.config["NETBOX_TOKEN"])
         self.circuit = self.api.circuits.circuits.get(
-            cid=self.api.circuits.circuits.filter(tag=['lon', 'car'])
+            cid=self.api.circuits.circuits.filter(tag=["lon", "car"])
         )
         self.provider = self.api.circuits.providers.get(self.circuit.provider.id)
         self.site_a = self.api.dcim.sites.get(self.circuit.termination_a.site.id)

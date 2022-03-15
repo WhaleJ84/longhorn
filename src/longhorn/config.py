@@ -54,6 +54,7 @@ class BrokenConfig(TestingConfig):
     """
     Variables that add to/overwrite values from the default class for the testing environment.
     """
+
     AUTH_TOKENS = {None: "some-user"}
 
 
