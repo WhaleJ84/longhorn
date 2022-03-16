@@ -4,6 +4,7 @@ Things such as routes and forms should be in separate files.
 """
 from flask import current_app as app
 from pynetbox import api
+import requests.exceptions
 
 
 class Netbox:
@@ -146,10 +147,13 @@ class Netbox:
     """
 
     def __init__(self):
-        self.api = api(url=app.config["NETBOX_URL"], token=app.config["NETBOX_TOKEN"])
-        self.circuit = self.api.circuits.circuits.get(
-            cid=self.api.circuits.circuits.filter(tag=["lon", "car"])
-        )
-        self.provider = self.api.circuits.providers.get(self.circuit.provider.id)
-        self.site_a = self.api.dcim.sites.get(self.circuit.termination_a.site.id)
-        self.site_z = self.api.dcim.sites.get(self.circuit.termination_z.site.id)
+        try:
+            self.api = api(url=app.config["NETBOX_URL"], token=app.config["NETBOX_TOKEN"])
+            self.circuit = self.api.circuits.circuits.get(
+                cid=self.api.circuits.circuits.filter(tag=["lon", "car"])
+            )
+            self.provider = self.api.circuits.providers.get(self.circuit.provider.id)
+            self.site_a = self.api.dcim.sites.get(self.circuit.termination_a.site.id)
+            self.site_z = self.api.dcim.sites.get(self.circuit.termination_z.site.id)
+        except requests.exceptions.ConnectionError:
+            pass

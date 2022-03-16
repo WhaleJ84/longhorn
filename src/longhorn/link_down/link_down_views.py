@@ -3,7 +3,7 @@ Contains all the routes (views) needed for the link_down blueprint.
 Things such as functions and forms should be in separate files.
 """
 from flask import current_app as app
-from flask import request
+from flask import g, request
 
 from src.longhorn.link_down.link_down_functions import build_response_data
 from src.longhorn.process.process_functions import check_sessions
@@ -23,18 +23,27 @@ def runbook():
     current_process = check_sessions(
         request.json["event_text"], app.config["PROCESS_FILE"]
     )
+    g.process_id = current_process.process_id  # pylint: disable=assigning-non-slot
     if current_process.is_duplicate:
         message = "Duplicate response"
         app.logger.info(
-            f"{current_process.process_id}\tduplicate response: {current_process.event_text} "
+            f"{g.process_id}\tduplicate response: {current_process.event_text} "
         )
         response.update({"status": 208, "message": message})
         return response, int(response["status"])
 
-    netbox = Netbox()
+    try:
+        netbox = Netbox()
 
-    if netbox.circuit.status.label != "Active":
-        message = f"circuit {netbox.circuit} is in {netbox.circuit.status} state"
-        app.logger.info(f"{current_process.process_id}\t{message}")
+        if netbox.circuit.status.label != "Active":
+            message = f"circuit {netbox.circuit} is in {netbox.circuit.status} state"
+            app.logger.info(f"{g.process_id}\t{message}")
+            response.update({"message": message})
+            return response, int(response["status"])
+    except AttributeError:
+        message = f"Connection error to {app.config['NETBOX_URL']}"
+        app.logger.error(f"{g.process_id}\t{message}")
+        response.update({"status": 503, "message": message})
+        return response, int(response["status"])
 
     return response, int(response["status"])
