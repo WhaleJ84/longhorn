@@ -9,6 +9,7 @@ pandas = "*"
 flask-httpauth = "*"
 pynetbox = "*"
 requests = "*"
+flask-mail = "*"
 
 [dev-packages]
 pylint = "*"
