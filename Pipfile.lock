@@ -48,7 +48,7 @@
         "faveo-handler": {
             "editable": true,
             "git": "https://github.com/WhaleJ84/faveo_handler.git",
-            "ref": "0601665f67be0123bddb169ff02afa89c12adb47"
+            "ref": "93f514d57ee35648b25f9f3cc92f98430ddcbb8c"
         },
         "flask": {
             "hashes": [
