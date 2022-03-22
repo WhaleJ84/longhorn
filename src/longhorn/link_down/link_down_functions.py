@@ -2,32 +2,21 @@
 Contains all the functions needed for the link_down blueprint.
 Things such as routes and forms should be in separate files.
 """
+from json import loads
+
 from flask import current_app as app
 from flask import request
 
 from src.longhorn.authentication.authentication_functions import auth
+from src.longhorn.email.email_functions import send_alert_transport_via_email
 from . import link_down
 
 
 def build_response_data(data: dict) -> dict:
     """
     Takes the request data and extracts the relevant matches for the required data.
-
-    When all expected parameters are recieved, they are returned in a sorted dictionary.
-
-    >>> build_response_data({
-    ... "event_url": "https://example.com",
-    ... "timestamp": "2021-10-15 23:20:01",
-    ... "causing_ci": "hostname.example.com"
-    ... })
-    {'causing_ci': 'hostname.example.com', 'event_url': 'https://example.com', 'timestamp': '2021-10-15 23:20:01'}
-
-
-    When unexpected parameters are recieved, they are omitted from the returned dictionary.
-
-    >>> build_response_data({"alphabet": "abcdefghijklmnopqrstuvwxyz",
-    ... "event_url": "https://example.com", "timestamp": "2021-10-15 23:20:01"})
-    {'event_url': 'https://example.com', 'timestamp': '2021-10-15 23:20:01'}
+    When all expected parameters are received, they are returned in a sorted dictionary.
+    When unexpected parameters are received, they are omitted from the returned dictionary.
 
     :param data: Raw request data in dict or JSON format
     :return:  Relevant request data in alphabetical order
@@ -61,3 +50,18 @@ def verify_data():
         app.logger.warning(f"{auth.current_user()}: {message}")
         return response, response["status"]
     return None
+
+
+@link_down.after_request
+def call_alert_transport(response):
+    """
+    Alert transports are methods that notify engineers of actions performed.
+    This method calls the transport specified by app.config["ALERT_TRANSPORT"]
+
+    :param response: The response object returned from Flask
+    """
+    data = loads(response.get_data().decode())
+
+    if app.config["ALERT_TRANSPORT"] == "email":
+        send_alert_transport_via_email(data)
+    return response
