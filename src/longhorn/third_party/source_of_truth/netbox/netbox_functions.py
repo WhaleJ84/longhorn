@@ -146,14 +146,29 @@ class Netbox:
         - vlan_count
     """
 
-    def __init__(self):
+    def __init__(self, side_a: str, side_z: str):
         try:
             self.api = api(url=app.config["NETBOX_URL"], token=app.config["NETBOX_TOKEN"])
             self.circuit = self.api.circuits.circuits.get(
-                cid=self.api.circuits.circuits.filter(tag=["lon", "car"])
+                cid=self.api.circuits.circuits.filter(tag=[side_a.lower(), side_z.lower()])
             )
             self.provider = self.api.circuits.providers.get(self.circuit.provider.id)
             self.site_a = self.api.dcim.sites.get(self.circuit.termination_a.site.id)
             self.site_z = self.api.dcim.sites.get(self.circuit.termination_z.site.id)
+            self.journal_entries = self.api.extras.journal_entries.filter(
+                assigned_object_type="circuits.circuit",
+                assigned_object_id=self.circuit.id
+            )
         except requests.exceptions.ConnectionError:
             pass
+
+    def check_journal_entries(self):
+        """
+        Loops through journal entries and extracts strings that reflect ticket numbers
+        """
+        incidents = []
+        for entry in self.journal_entries:
+            if "Incident opened" in entry.comments:
+                incidents.append(str(entry.comments).split()[-1])
+        app.logger.info(f"Found incidents: {incidents}")
+        return incidents
