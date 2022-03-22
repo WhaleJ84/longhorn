@@ -8,6 +8,7 @@ from flask import g, request
 from src.longhorn.link_down.link_down_functions import build_response_data
 from src.longhorn.process.process_functions import check_sessions
 from src.longhorn.third_party.source_of_truth.netbox.netbox_functions import Netbox
+from src.longhorn.third_party.service_management.faveo.faveo_functions import check_existing_tickets
 from . import link_down
 
 
@@ -17,7 +18,7 @@ def runbook():
     The route that triggers all the necessary actions to handle when a link goes down.
     """
     response = build_response_data(request.json)
-    response.update({"status": 200})
+    response.update({"status": 200, "message": "NO MESSAGE SET"})
 
     # Checking if there is already a request in the queue
     current_process = check_sessions(
@@ -33,7 +34,7 @@ def runbook():
         return response, int(response["status"])
 
     try:
-        netbox = Netbox()
+        netbox = Netbox(current_process.side_a, current_process.side_z)
 
         if netbox.circuit.status.label != "Active":
             message = f"circuit {netbox.circuit} is in {netbox.circuit.status} state"
@@ -45,5 +46,13 @@ def runbook():
         app.logger.error(f"{g.process_id}\t{message}")
         response.update({"status": 503, "message": message})
         return response, int(response["status"])
+
+    incidents = netbox.check_journal_entries()
+    existing_tickets = check_existing_tickets(incidents)
+
+    if len(existing_tickets) >= 1:
+        message = f"Existing open tickets: {existing_tickets}"
+        app.logger.info(f"{g.process_id}\t{message}")
+        response.update({"message": message})
 
     return response, int(response["status"])

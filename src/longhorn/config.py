@@ -42,6 +42,10 @@ class Config:
     NETBOX_TOKEN = getenv("NETBOX_TOKEN")
     ENGINEERS_EMAIL = "4whalj16@solent.ac.uk"
     MAIL_DEFAULT_SENDER = "longhorn@james-whale.com"
+    TICKETING_SYSTEM = ticketing_systems[1]
+    FAVEO_URL = getenv("FAVEO_URL")
+    FAVEO_USERNAME = getenv("FAVEO_USERNAME")
+    FAVEO_PASSWORD = getenv("FAVEO_PASSWORD")
 
 
 class DevelopmentConfig(Config):
