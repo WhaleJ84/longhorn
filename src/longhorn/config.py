@@ -7,6 +7,21 @@ from os import getenv, urandom
 from os.path import abspath, join
 from secrets import token_urlsafe
 
+# Lists containing supported values
+# Options below should chose from list to prevent errors
+alert_transports = [
+    None,
+    "email"
+]
+sources_of_truth = [
+    None,
+    "netbox"
+]
+ticketing_systems = [
+    None,
+    "faveo"
+]
+
 
 class Config:
     """
@@ -21,9 +36,12 @@ class Config:
     PROCESS_FILE = abspath(
         join(abspath("."), glob("**/var/cache/processes.csv", recursive=True)[0])
     )
-    SOURCE_OF_TRUTH = "netbox"
+    SOURCE_OF_TRUTH = sources_of_truth[1]
     NETBOX_URL = getenv("NETBOX_URL")
+    ALERT_TRANSPORT = alert_transports[1]
     NETBOX_TOKEN = getenv("NETBOX_TOKEN")
+    ENGINEERS_EMAIL = "4whalj16@solent.ac.uk"
+    MAIL_DEFAULT_SENDER = "longhorn@james-whale.com"
 
 
 class DevelopmentConfig(Config):
@@ -48,6 +66,7 @@ class TestingConfig(Config):
     PROCESS_TTL = 1
     AUTH_TOKENS = {"test": "unit-test"}
     PROCESS_FILE = "test/test_process/var/cache/test_processes.csv"
+    ALERT_TRANSPORT = alert_transports[0]
 
 
 class BrokenConfig(TestingConfig):
