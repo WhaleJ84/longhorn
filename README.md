@@ -21,3 +21,14 @@ Currently included technologies are as follows:
   - Verifies ticket is still in an open state
   - Opens ticket if one does not exist
   - Updates ticket with performed actions
+
+## Testing Locally
+
+The following steps are to remind myself of all requirements in the project thus far.
+For others attempting to recreate this, own instances of Faveo and Netbox are required (they're both free).
+
+1) Run local mail-server: `sudo mailhog --smtp-bind-addr 127.0.0.1:25`
+2) Ensure Faveo and Netbox servers are running
+3) Run Longhorn
+4) Send in request
+5) Verify output in [email](http://localhost:8025)
