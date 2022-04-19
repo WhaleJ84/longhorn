@@ -24,21 +24,25 @@ def send_email(email: Message):
 
     :param email: The Message object containing all email details
     """
-    with mail.record_messages() as outbox:
-        mail.send(email)
+    try:
+        with mail.record_messages() as outbox:
+            mail.send(email)
 
-    response = dict(
-        {
-            "subject": email.subject,
-            "recipients": email.recipients,
-            "message": email.body,
-            "sender": email.sender,
-            "cc": email.cc,
-            "outbox": len(outbox),
-        }
-    )
+        response = dict(
+            {
+                "subject": email.subject,
+                "recipients": email.recipients,
+                "message": email.body,
+                "sender": email.sender,
+                "cc": email.cc,
+                "outbox": len(outbox),
+            }
+        )
 
-    return response
+        return response
+    except ConnectionRefusedError:
+        app.logger.error(f"{g.process_id}\tFailed to send email: {email.body}")
+        return None
 
 
 def send_alert_transport_via_email(response: dict):
