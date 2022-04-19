@@ -2,6 +2,7 @@
 Contains all the functions needed for the link_down blueprint.
 Things such as routes and forms should be in separate files.
 """
+import json.decoder
 from json import loads
 
 from flask import current_app as app
@@ -60,8 +61,12 @@ def call_alert_transport(response):
 
     :param response: The response object returned from Flask
     """
-    data = loads(response.get_data().decode())
+    try:
+        data = loads(response.get_data().decode())
+    except json.decoder.JSONDecodeError:
+        print(response.get_data())
 
-    if app.config["ALERT_TRANSPORT"] == "email":
-        send_alert_transport_via_email(data)
+    if data["status"] in [200, 201]:
+        if app.config["ALERT_TRANSPORT"] == "email":
+            send_alert_transport_via_email(data)
     return response
