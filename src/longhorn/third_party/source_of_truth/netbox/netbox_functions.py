@@ -172,3 +172,19 @@ class Netbox:
                 incidents.append(str(entry.comments).split()[-1])
         app.logger.info(f"Found incidents: {incidents}")
         return incidents
+
+    def generate_incident_template(self, event_text: str):
+        return f"""
+        Event: {event_text}
+        Circuit ID: {self.circuit}
+        {self.circuit.termination_a}
+        {self.circuit.termination_z}
+        Provider: {self.circuit.provider}
+        """
+
+    def update_circuit_journal(self, ticket_number):
+        self.api.extras.journal_entries.create(
+            assigned_object_type="circuits.circuit",
+            assigned_object_id=self.circuit.id,
+            comments=f"Incident opened: {app.config['FAVEO_URL']}/thread/{ticket_number}"
+        )
